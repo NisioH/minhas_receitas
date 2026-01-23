@@ -5,21 +5,19 @@ from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from data.database import Database
-from domain.logic import parse_decimal, validar_unidade
+from domain.logic import parse_decimal
 
-class IngredienteScreen(MDScreen):
+class ReceitaScreen(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.db = Database()
 
         layout = MDBoxLayout(orientation="vertical", spacing=20, padding=40,
-                             size_hint=(0.8, None), height=450,
+                             size_hint=(0.8, None), height=300,
                              pos_hint={"center_x": 0.5, "center_y": 0.5})
 
-        self.nome = MDTextField(hint_text="Nome do ingrediente")
-        self.unidade = MDTextField(hint_text="Unidade (ml/g/und)")
-        self.preco = MDTextField(hint_text="Preço do pacote (ex: 6,50)")
-        self.qtd_pacote = MDTextField(hint_text="Quantidade do pacote (ex: 1000)")
+        self.nome = MDTextField(hint_text="Nome da receita")
+        self.rendimento = MDTextField(hint_text="Rendimento (número de porções)", input_filter="int")
 
         salvar_btn = MDRaisedButton(text="Salvar", pos_hint={"center_x": 0.5})
         salvar_btn.bind(on_release=self.salvar)
@@ -28,9 +26,7 @@ class IngredienteScreen(MDScreen):
         voltar_btn.bind(on_release=lambda *args: setattr(self.manager, "current", "menu"))
 
         layout.add_widget(self.nome)
-        layout.add_widget(self.unidade)
-        layout.add_widget(self.preco)
-        layout.add_widget(self.qtd_pacote)
+        layout.add_widget(self.rendimento)
         layout.add_widget(salvar_btn)
         layout.add_widget(voltar_btn)
 
@@ -38,19 +34,16 @@ class IngredienteScreen(MDScreen):
 
     def salvar(self, *args):
         nome = self.nome.text.strip()
-        unidade = self.unidade.text.strip()
-        ok_preco, preco = parse_decimal(self.preco.text)
-        ok_qtd, qtd = parse_decimal(self.qtd_pacote.text)
+        rendimento_texto = self.rendimento.text.strip()
 
-        if not nome or not unidade:
+        if not nome or not rendimento_texto:
             Snackbar(text="Preencha todos os campos!").open()
             return
-        if not validar_unidade(unidade):
-            Snackbar(text="Unidade inválida (ml/g/und)").open()
-            return
-        if not ok_preco or not ok_qtd:
-            Snackbar(text="Preço ou quantidade inválidos").open()
+
+        ok_rend, rendimento = parse_decimal(rendimento_texto)
+        if not ok_rend or rendimento <= 0:
+            Snackbar(text="Rendimento inválido").open()
             return
 
-        ok, msg = self.db.insert_ingrediente(nome, unidade, preco, qtd)
+        ok, msg = self.db.insert_receita(nome, int(rendimento))
         Snackbar(text=msg).open()
