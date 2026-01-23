@@ -1,7 +1,7 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.textfield import MDTextField
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.list import OneLineListItem
@@ -68,12 +68,12 @@ class VinculoScreen(MDScreen):
 
     def salvar(self, *args):
         if not self.receita_selecionada or not self.ingrediente_selecionado:
-            Snackbar(text="Selecione receita e ingrediente!").open()
+            toast(text="Selecione receita e ingrediente!")
             return
 
         ok_qtd, qtd = parse_decimal(self.qtd_usada.text)
         if not ok_qtd or qtd <= 0:
-            Snackbar(text="Quantidade inválida!").open()
+            toast(text="Quantidade inválida!")
             return
 
         ok, msg = self.db.add_ingrediente_na_receita(
@@ -81,4 +81,4 @@ class VinculoScreen(MDScreen):
             self.ingrediente_selecionado["id"],
             qtd
         )
-        Snackbar(text=msg).open()
+        toast(text=msg).open()

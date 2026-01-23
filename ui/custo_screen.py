@@ -1,6 +1,6 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.button import MDRaisedButton
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.list import OneLineListItem
@@ -66,12 +66,12 @@ class CustoScreen(MDScreen):
 
     def calcular(self, *args):
         if not self.receita_selecionada:
-            Snackbar(text="Selecione uma receita!").open()
+            toast(text="Selecione uma receita!")
             return
 
         ok_ing, ingredientes = self.db.list_ingredientes_da_receita(self.receita_selecionada["id"])
         if not ok_ing or not ingredientes:
-            Snackbar(text="Nenhum ingrediente vinculado à receita!").open()
+            toast(text="Nenhum ingrediente vinculado à receita!")
             return
 
         receita_info = {"rendimento": self.receita_selecionada["rendimento"]}
@@ -81,4 +81,4 @@ class CustoScreen(MDScreen):
             self.result_total.text = f"Custo total: R$ {resultado['custo_total']:.2f}"
             self.result_porcao.text = f"Custo por porção: R$ {resultado['custo_por_porcao']:.2f}"
         else:
-            Snackbar(text=resultado).open()
+            toast(text=resultado)

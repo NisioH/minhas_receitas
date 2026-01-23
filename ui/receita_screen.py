@@ -1,7 +1,7 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.textfield import MDTextField
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from data.database import Database
@@ -37,13 +37,13 @@ class ReceitaScreen(MDScreen):
         rendimento_texto = self.rendimento.text.strip()
 
         if not nome or not rendimento_texto:
-            Snackbar(text="Preencha todos os campos!").open()
+            toast(text="Preencha todos os campos!")
             return
 
         ok_rend, rendimento = parse_decimal(rendimento_texto)
         if not ok_rend or rendimento <= 0:
-            Snackbar(text="Rendimento inválido").open()
+            toast(text="Rendimento inválido")
             return
 
         ok, msg = self.db.insert_receita(nome, int(rendimento))
-        Snackbar(text=msg).open()
+        toast(msg)

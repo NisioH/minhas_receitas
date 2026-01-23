@@ -1,7 +1,7 @@
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.textfield import MDTextField
-from kivymd.uix.snackbar import Snackbar
+from kivymd.toast import toast
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from data.database import Database
@@ -43,14 +43,20 @@ class IngredienteScreen(MDScreen):
         ok_qtd, qtd = parse_decimal(self.qtd_pacote.text)
 
         if not nome or not unidade:
-            Snackbar(text="Preencha todos os campos!").open()
+            toast(text="Preencha todos os campos!")
             return
         if not validar_unidade(unidade):
-            Snackbar(text="Unidade inválida (ml/g/und)").open()
+            toast(text="Unidade inválida (ml/g/und)")
             return
         if not ok_preco or not ok_qtd:
-            Snackbar(text="Preço ou quantidade inválidos").open()
+            toast(text="Preço ou quantidade inválidos")
             return
 
         ok, msg = self.db.insert_ingrediente(nome, unidade, preco, qtd)
-        Snackbar(text=msg).open()
+        toast(msg)
+
+        if ok:
+            self.nome.text = ""
+            self.unidade.text = ""
+            self.preco.text = ""
+            self.qtd_pacote.text = ""
