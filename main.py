@@ -4,7 +4,6 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.boxlayout import MDBoxLayout
 
-# Importar telas
 from ui.ingrediente_screen import IngredienteScreen
 from ui.receita_screen import ReceitaScreen
 from ui.vinculo_screen import VinculoScreen
@@ -20,7 +19,6 @@ class MenuScreen(MDScreen):
         layout.height = 400
         layout.pos_hint = {"center_x": 0.5, "center_y": 0.5}
 
-        # Botões para navegar
         btn_ing = MDRaisedButton(text="Cadastro de Ingredientes", pos_hint={"center_x": 0.5})
         btn_ing.bind(on_release=lambda *args: setattr(self.manager, "current", "ingredientes"))
 
@@ -52,14 +50,12 @@ class ReceitasApp(MDApp):
     def build(self):
         sm = MDScreenManager()
 
-        # Adicionar telas com nomes únicos
         sm.add_widget(MenuScreen(name="menu"))
         sm.add_widget(IngredienteScreen(name="ingredientes"))
         sm.add_widget(ReceitaScreen(name="receitas"))
         sm.add_widget(VinculoScreen(name="vinculo"))
         sm.add_widget(CustoScreen(name="custo"))
 
-        # Definir tela inicial
         sm.current = "menu"
 
         return sm

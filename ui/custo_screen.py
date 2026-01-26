@@ -23,7 +23,6 @@ class CustoScreen(MDScreen):
             pos_hint={"center_x": 0.5, "center_y": 0.5},
         )
 
-        # Seleção de receita
         self.receita_btn = MDRaisedButton(text="Selecionar Receita", pos_hint={"center_x": 0.5})
         self.receita_selecionada = None
 
@@ -38,19 +37,15 @@ class CustoScreen(MDScreen):
         self.menu_receita = MDDropdownMenu(caller=self.receita_btn, items=receita_items, width_mult=4)
         self.receita_btn.bind(on_release=lambda *args: self.menu_receita.open())
 
-        # Botão calcular
         calcular_btn = MDRaisedButton(text="Calcular custo", pos_hint={"center_x": 0.5})
         calcular_btn.bind(on_release=self.calcular)
 
-        # Labels de resultado
         self.result_total = MDLabel(text="Custo total: -", halign="center")
         self.result_porcao = MDLabel(text="Custo por porção: -", halign="center")
 
-        # Voltar ao menu
         voltar_btn = MDRaisedButton(text="Voltar ao Menu", pos_hint={"center_x": 0.5})
         voltar_btn.bind(on_release=lambda *args: setattr(self.manager, "current", "menu"))
 
-        # Montagem
         layout.add_widget(self.receita_btn)
         layout.add_widget(calcular_btn)
         layout.add_widget(self.result_total)

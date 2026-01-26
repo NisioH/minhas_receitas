@@ -18,7 +18,6 @@ class VinculoScreen(MDScreen):
                              size_hint=(0.9, None), height=400,
                              pos_hint={"center_x": 0.5, "center_y": 0.5})
 
-        # Seleção de receita
         self.receita_btn = MDRaisedButton(text="Selecionar Receita", pos_hint={"center_x": 0.5})
         self.receita_selecionada = None
         receitas = self.db.list_receitas()[1]
@@ -29,7 +28,6 @@ class VinculoScreen(MDScreen):
         self.menu_receita = MDDropdownMenu(caller=self.receita_btn, items=receita_items, width_mult=4)
         self.receita_btn.bind(on_release=lambda *args: self.menu_receita.open())
 
-        # Seleção de ingrediente
         self.ingrediente_btn = MDRaisedButton(text="Selecionar Ingrediente", pos_hint={"center_x": 0.5})
         self.ingrediente_selecionado = None
         ingredientes = self.db.list_ingredientes()[1]
@@ -81,4 +79,4 @@ class VinculoScreen(MDScreen):
             self.ingrediente_selecionado["id"],
             qtd
         )
-        toast(text=msg).open()
+        toast(text=msg)
